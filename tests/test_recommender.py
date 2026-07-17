@@ -1,4 +1,4 @@
-from src.recommender import Song, UserProfile, Recommender
+from src.recommender import Song, UserProfile, Recommender, score_song
 
 def make_small_recommender() -> Recommender:
     songs = [
@@ -44,6 +44,16 @@ def test_recommend_returns_songs_sorted_by_score():
     # Starter expectation: the pop, happy, high energy song should score higher
     assert results[0].genre == "pop"
     assert results[0].mood == "happy"
+
+
+def test_score_song_uses_weighted_points():
+    user_prefs = {"genre": "pop", "mood": "happy", "energy": 0.8}
+    song = {"genre": "pop", "mood": "happy", "energy": 0.8}
+
+    score, reasons = score_song(user_prefs, song)
+
+    assert score == 4.0
+    assert len(reasons) >= 3
 
 
 def test_explain_recommendation_returns_non_empty_string():
