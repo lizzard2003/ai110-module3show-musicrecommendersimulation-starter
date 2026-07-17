@@ -1,4 +1,5 @@
 import csv
+from pathlib import Path
 from typing import List, Dict, Tuple, Optional, Any
 from dataclasses import dataclass
 
@@ -38,7 +39,7 @@ class Recommender:
     def __init__(self, songs: List[Song]):
         self.songs = songs
 
-    def recommend(self, user: UserProfile, k: int = 5) -> List[Song]:
+    def recommend(self, user: UserProfile, k: int = 7) -> List[Song]:
         scored_songs = []
         for song in self.songs:
             score, _ = score_song(
@@ -67,11 +68,21 @@ class Recommender:
 
 def load_songs(csv_path: str) -> List[Dict]:
     """
-    Loads songs from a CSV file.
+    Loads songs from a CSV file into a list of dictionaries.
+    Text fields remain strings, while numeric values such as id, energy,
+    and tempo_bpm are converted to integers or floats.
     Required by src/main.py
     """
-    print(f"Loading songs from {csv_path}...")
-    with open(csv_path, newline="", encoding="utf-8") as handle:
+    path = Path(csv_path)
+    if not path.is_absolute():
+        repo_relative = Path(__file__).resolve().parent.parent / path
+        if repo_relative.exists():
+            path = repo_relative
+        else:
+            path = Path.cwd() / path
+
+    print(f"Loading songs from {path}...")
+    with path.open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
         songs = []
         for row in reader:
@@ -92,16 +103,14 @@ def load_songs(csv_path: str) -> List[Dict]:
     return songs
 
 def _get_value(item: Any, key: str) -> Any:
+    """Return a value from a dictionary or object by key."""
     if isinstance(item, dict):
         return item.get(key)
     return getattr(item, key, None)
 
 
 def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
-    """
-    Scores a single song against user preferences.
-    Required by recommend_songs() and src/main.py
-    """
+    """Score one song against user preferences and explain the result."""
     genre_pref = _get_value(user_prefs, "genre") or _get_value(user_prefs, "favorite_genre")
     mood_pref = _get_value(user_prefs, "mood") or _get_value(user_prefs, "favorite_mood")
     energy_pref = _get_value(user_prefs, "energy") or _get_value(user_prefs, "target_energy")
@@ -115,24 +124,32 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
 
     if genre_pref and song_genre and str(genre_pref).lower() == str(song_genre).lower():
         score += 2.0
-        reasons.append("genre match")
+        reasons.append("genre match (+2.0)")
 
     if mood_pref and song_mood and str(mood_pref).lower() == str(song_mood).lower():
-        score += 1.0
-        reasons.append("mood match")
+        score += 2.5
+        reasons.append("mood match (+2.5)")
 
     if energy_pref is not None and song_energy is not None:
         energy_similarity = max(0.0, 1.0 - abs(float(song_energy) - float(energy_pref)))
-        score += energy_similarity
-        reasons.append(f"energy similarity {energy_similarity:.2f}")
+        score += energy_similarity * 2.0
+        reasons.append(
+            f"energy match to user preference (+{energy_similarity * 2.0:.2f})"
+        )
+
+    if genre_pref and song_genre and str(genre_pref).lower() == str(song_genre).lower():
+        reasons.append(f"user likes genre {genre_pref}")
+
+    if mood_pref and song_mood and str(mood_pref).lower() == str(song_mood).lower():
+        reasons.append(f"user likes mood {mood_pref}")
+
+    if energy_pref is not None:
+        reasons.append(f"user target energy is {energy_pref}")
 
     return score, reasons
 
-def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, str]]:
-    """
-    Functional implementation of the recommendation logic.
-    Required by src/main.py
-    """
+def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 7) -> List[Tuple[Dict, float, str]]:
+    """Return the top-k scored songs with explanations for a user profile."""
     scored_songs = []
     for song in songs:
         score, reasons = score_song(user_prefs, song)

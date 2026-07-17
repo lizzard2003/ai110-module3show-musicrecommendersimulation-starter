@@ -93,13 +93,40 @@ You can add more tests in `tests/test_recommender.py`.
 
 Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
 
-```
+```text
 # e.g.:
 # User profile: genre=indie, mood=chill, energy=low
 # Recommendations:
-#   1. ...
-#   2. ...
-#   3. ...
+Top recommendations:
+
+Title: Sunrise City
+Score: 6.46
+Reasons: genre match (+2.0); mood match (+2.5); energy match to user preference (+1.96); user likes genre pop; user likes mood happy; user target energy is 0.8
+--------------------------------------------------
+Title: Rooftop Lights
+Score: 4.42
+Reasons: mood match (+2.5); energy match to user preference (+1.92); user likes mood happy; user target energy is 0.8
+--------------------------------------------------
+Title: Gym Hero
+Score: 3.74
+Reasons: genre match (+2.0); energy match to user preference (+1.74); user likes genre pop; user target energy is 0.8
+--------------------------------------------------
+Title: Night Drive Loop
+Score: 1.90
+Reasons: energy match to user preference (+1.90); user target energy is 0.8
+--------------------------------------------------
+Title: Storm Runner
+Score: 1.78
+Reasons: energy match to user preference (+1.78); user target energy is 0.8
+--------------------------------------------------
+Title: Midnight Coding
+Score: 1.24
+Reasons: energy match to user preference (+1.24); user target energy is 0.8
+--------------------------------------------------
+Title: Focus Flow
+Score: 1.20
+Reasons: energy match to user preference (+1.20); user target energy is 0.8
+--------------------------------------------------
 ```
 
 **Screenshot or video** _(optional)_: <!-- Insert a screenshot or demo video link here -->

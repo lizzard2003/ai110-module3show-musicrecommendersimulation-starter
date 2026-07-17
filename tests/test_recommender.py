@@ -1,4 +1,6 @@
-from src.recommender import Song, UserProfile, Recommender, score_song
+from pathlib import Path
+
+from src.recommender import Song, UserProfile, Recommender, load_songs, recommend_songs, score_song
 
 def make_small_recommender() -> Recommender:
     songs = [
@@ -54,6 +56,33 @@ def test_score_song_uses_weighted_points():
 
     assert score == 4.0
     assert len(reasons) >= 3
+
+
+def test_load_songs_converts_numeric_fields():
+    songs = load_songs("data/songs.csv")
+
+    assert isinstance(songs, list)
+    assert songs[0]["title"] == "Sunrise City"
+    assert isinstance(songs[0]["id"], int)
+    assert isinstance(songs[0]["energy"], float)
+    assert isinstance(songs[0]["tempo_bpm"], float)
+
+
+def test_load_songs_works_when_run_from_source_directory(monkeypatch):
+    monkeypatch.chdir(Path(__file__).resolve().parents[1] / "src")
+
+    songs = load_songs("data/songs.csv")
+
+    assert songs[0]["title"] == "Sunrise City"
+
+
+def test_recommend_songs_respects_requested_count():
+    songs = load_songs("data/songs.csv")
+    user_prefs = {"genre": "pop", "mood": "happy", "energy": 0.8}
+
+    recommendations = recommend_songs(user_prefs, songs, k=7)
+
+    assert len(recommendations) == 7
 
 
 def test_explain_recommendation_returns_non_empty_string():
