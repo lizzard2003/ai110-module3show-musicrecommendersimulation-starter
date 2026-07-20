@@ -167,3 +167,103 @@ Write 1 to 2 paragraphs here about what you learned:
 
 - about how recommenders turn data into predictions
 - about where bias or unfairness could show up in systems like this
+  I learned about how Spotify works and how we can make a model have specific rules to pick specific songs. For instance in my case I wanted the user to keep a consistent flow of energy so I made that be the main focus. Because of this I also wanted the mood of the songs picked to be the second rule.
+  There were limitions to this project that I would like to expand on . The first being adding a bigger library to the list of songs and incorporatring more features that the user might want.
+
+## Stress Test with Diverse Profiles
+
+Profile 1: {'genre': 'pop', 'mood': 'happy', 'energy': 0.8}
+
+Title: Sunrise City
+Score: 6.46
+Reasons: genre match (+2.0); mood match (+2.5); energy match to user preference (+1.96); user likes genre pop; user likes mood happy; user target energy is 0.8
+
+---
+
+Title: Rooftop Lights
+Score: 4.42
+Reasons: mood match (+2.5); energy match to user preference (+1.92); user likes mood happy; user target energy is 0.8
+
+---
+
+Title: Gym Hero
+Score: 3.74
+Reasons: genre match (+2.0); energy match to user preference (+1.74); user likes genre pop; user target energy is 0.8
+
+---
+
+Title: Night Drive Loop
+Score: 1.90
+Reasons: energy match to user preference (+1.90); user target energy is 0.8
+
+---
+
+Title: Storm Runner
+Score: 1.78
+Reasons: energy match to user preference (+1.78); user target energy is 0.8
+
+---
+
+Profile 2: {'genre': 'rock', 'mood': 'energetic', 'energy': 0.7}
+
+Title: Storm Runner
+Score: 3.58
+Reasons: genre match (+2.0); energy match to user preference (+1.58); user likes genre rock; user target energy is 0.7
+
+---
+
+Title: Night Drive Loop
+Score: 1.90
+Reasons: energy match to user preference (+1.90); user target energy is 0.7
+
+---
+
+Title: Rooftop Lights
+Score: 1.88
+Reasons: energy match to user preference (+1.88); user target energy is 0.7
+
+---
+
+Title: Sunrise City
+Score: 1.76
+Reasons: energy match to user preference (+1.76); user target energy is 0.7
+
+---
+
+Title: Gym Hero
+Score: 1.54
+Reasons: energy match to user preference (+1.54); user target energy is 0.7
+
+---
+
+Profile 3: {'genre': 'jazz', 'mood': 'chill', 'energy': 0.3}
+
+Title: Spacewalk Thoughts
+Score: 4.46
+Reasons: mood match (+2.5); energy match to user preference (+1.96); user likes mood chill; user target energy is 0.3
+
+---
+
+Title: Library Rain
+Score: 4.40
+Reasons: mood match (+2.5); energy match to user preference (+1.90); user likes mood chill; user target energy is 0.3
+
+---
+
+Title: Midnight Coding
+Score: 4.26
+Reasons: mood match (+2.5); energy match to user preference (+1.76); user likes mood chill; user target energy is 0.3
+
+---
+
+Title: Coffee Shop Stories
+Score: 3.86
+Reasons: genre match (+2.0); energy match to user preference (+1.86); user likes genre jazz; user target energy is 0.3
+
+---
+
+Title: Focus Flow
+Score: 1.80
+Reasons: energy match to user preference (+1.80); user target energy is 0.3
+
+---

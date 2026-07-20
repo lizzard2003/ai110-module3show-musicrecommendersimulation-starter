@@ -126,9 +126,10 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
         score += 2.0
         reasons.append("genre match (+2.0)")
 
-    if mood_pref and song_mood and str(mood_pref).lower() == str(song_mood).lower():
-        score += 2.5
-        reasons.append("mood match (+2.5)")
+    # FEATURE REMOVED: Mood check - commenting out to test impact on rankings
+    # if mood_pref and song_mood and str(mood_pref).lower() == str(song_mood).lower():
+    #     score += 2.5
+    #     reasons.append("mood match (+2.5)")
 
     if energy_pref is not None and song_energy is not None:
         energy_similarity = max(0.0, 1.0 - abs(float(song_energy) - float(energy_pref)))
@@ -140,8 +141,9 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     if genre_pref and song_genre and str(genre_pref).lower() == str(song_genre).lower():
         reasons.append(f"user likes genre {genre_pref}")
 
-    if mood_pref and song_mood and str(mood_pref).lower() == str(song_mood).lower():
-        reasons.append(f"user likes mood {mood_pref}")
+    # FEATURE REMOVED: Mood reasoning - commenting out to match mood scoring removal
+    # if mood_pref and song_mood and str(mood_pref).lower() == str(song_mood).lower():
+    #     reasons.append(f"user likes mood {mood_pref}")
 
     if energy_pref is not None:
         reasons.append(f"user target energy is {energy_pref}")
